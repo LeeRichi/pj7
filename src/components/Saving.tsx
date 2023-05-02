@@ -5,16 +5,38 @@ type SavingProps = {
   setSavings: React.Dispatch<React.SetStateAction<number>>;
 };
 
+type ProgressBarProps = {
+  percentage: number;
+}
+
+const ProgressBar = ({ percentage }: ProgressBarProps) => {
+  return (
+    <div>
+      <progress max='100' value={percentage} />
+    </div>
+  )
+}
+
+
 const Saving = ({ savings, setSavings }: SavingProps) =>
 {
     const [target, setTarget] = useState(0)
+    const [handletarget, setHandleTarget] = useState(0)
+
+    const [percentage, setPercentage] = useState(0)
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTarget(Number(event.target.value));
+    setHandleTarget(Number(event.target.value));
   };
 
   const handleReset = () => {
-    setTarget(0);
+      setTarget(handletarget);
+      setHandleTarget(0);
+      if (target > 0) {
+        setPercentage(savings/target*100);
+      }
+      
   };
     
   return (
@@ -24,7 +46,7 @@ const Saving = ({ savings, setSavings }: SavingProps) =>
         type='number'
         id='target'
         name='target'
-        value={target}
+        value={handletarget}
         onChange={handleInputChange}
       />
         <button onClick={handleReset}>Reset</button>
@@ -32,9 +54,9 @@ const Saving = ({ savings, setSavings }: SavingProps) =>
         <br />
         target: {target}
         <br />
-
+        Progress: {percentage}%
     
-      <progress max='100' value={savings} />
+        <ProgressBar percentage={percentage}/>
     </div>
   );
 };

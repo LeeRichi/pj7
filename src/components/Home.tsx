@@ -6,6 +6,8 @@ import IncomeForm from './IncomeForm';
 import ExpenseForm from './ExpenseForm';
 import Saving from './Saving'
 
+
+
 const Home = () =>
 {
     const [totalIncome, setTotalIncome] = useState<number>(0);
@@ -13,8 +15,6 @@ const Home = () =>
     const [balance, setBalance] = useState<number>(0);
     const [transferAmount, setTransferAmount] = useState<number>(0);
     const [savings, setSavings] = useState<number>(0);
-
-
     const TotalBalance = totalIncome - totalExpense;
 
     useEffect(() => {
@@ -28,8 +28,14 @@ const Home = () =>
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) =>
     {
         event.preventDefault();
-        setSavings(prevSavings => prevSavings + transferAmount);
-        setBalance(prevBalance => prevBalance - transferAmount);
+        if (balance > transferAmount) {
+            setSavings(prevSavings => prevSavings + transferAmount);
+            setBalance(prevBalance => prevBalance - transferAmount);
+            setTransferAmount(0);
+        } else {
+            alert('you dont have enough to transfer')
+            setTransferAmount(0);
+        }
     }
 
 
@@ -50,9 +56,7 @@ const Home = () =>
                 required
             />
             <button type="submit">Transfer</button>
-          </form>
-          {/* saving: {savings} */}
-        
+          </form>        
           <Saving savings={savings} setSavings={setSavings} />
     </>
   )
